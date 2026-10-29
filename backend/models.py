@@ -18,8 +18,8 @@ class User(Base):
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
 
 
-class Crop(Base):
-    __tablename__ = "crops"
+class Product(Base):
+    __tablename__ = "products"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(80), unique=True, nullable=False)
     category = Column(String(30), nullable=False)
@@ -30,7 +30,7 @@ class ProduceListing(Base):
     __tablename__ = "produce_listings"
     id = Column(Integer, primary_key=True, index=True)
     farmer_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    crop_id = Column(Integer, ForeignKey("crops.id"), nullable=False)
+    product_id = Column(Integer, ForeignKey("products.id"), nullable=False)
     quantity = Column(Numeric(10, 2), nullable=False)
     price_per_unit = Column(Numeric(12, 2), nullable=False)
     min_order_qty = Column(Numeric(10, 2), nullable=False)
