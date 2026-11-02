@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from decimal import Decimal
 from typing import Optional, Literal
 
@@ -26,6 +26,7 @@ class UserOut(BaseModel):
     farmer_type: Optional[str] = None
     buyer_type: Optional[str] = None
     district: Optional[str] = None
+    is_active: bool = True
 
     model_config = {"from_attributes": True}
 
@@ -105,5 +106,74 @@ class ListingOut(ListingBase):
     id: int
     farmer_id: int
     status: str
+    image_url: Optional[str] = None
 
     model_config = {"from_attributes": True}
+
+
+# --------------------------------------------------------------- ORDERS
+class OrderCreate(BaseModel):
+    listing_id: int
+    quantity: Decimal = Field(gt=0)
+
+
+class OrderOut(BaseModel):
+    id: int
+    buyer_id: int
+    listing_id: int
+    quantity: Decimal
+    total_price: Decimal
+    status: str
+    created_at: Optional[datetime] = None
+
+    model_config = {"from_attributes": True}
+
+
+# ------------------------------------------------------------- MESSAGES
+class MessageCreate(BaseModel):
+    receiver_id: int
+    listing_id: Optional[int] = None
+    body: str = Field(min_length=1, max_length=2000)
+
+
+class MessageOut(BaseModel):
+    id: int
+    sender_id: int
+    receiver_id: int
+    listing_id: Optional[int] = None
+    body: str
+    created_at: Optional[datetime] = None
+
+    model_config = {"from_attributes": True}
+
+
+# ------------------------------------------------------------- ADVISORY
+class AdvisoryCreate(BaseModel):
+    title: str = Field(min_length=3, max_length=150)
+    category: str = Field(min_length=2, max_length=20)
+    body: str = Field(min_length=10)
+
+
+class AdvisoryUpdate(BaseModel):
+    title: Optional[str] = Field(default=None, min_length=3, max_length=150)
+    category: Optional[str] = Field(default=None, min_length=2, max_length=20)
+    body: Optional[str] = Field(default=None, min_length=10)
+
+
+class AdvisoryOut(BaseModel):
+    id: int
+    author_id: int
+    title: str
+    category: str
+    body: str
+    created_at: Optional[datetime] = None
+
+    model_config = {"from_attributes": True}
+
+# Force Pydantic to rebuild the models for Python 3.14
+ListingOut.model_rebuild()
+UserOut.model_rebuild()
+ProductOut.model_rebuild()
+OrderOut.model_rebuild()
+MessageOut.model_rebuild()
+AdvisoryOut.model_rebuild()

@@ -15,6 +15,7 @@ class User(Base):
     farmer_type = Column(String(15))           # smallholder, urban, commercial
     buyer_type = Column(String(15))            # trader, business, household
     district = Column(String(60))
+    is_active = Column(Boolean, nullable=False, default=True, server_default="1")
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
 
 
@@ -40,6 +41,7 @@ class ProduceListing(Base):
     best_before = Column(Date)
     is_urgent = Column(Boolean, nullable=False, default=False)
     status = Column(String(15), nullable=False, default="available")
+    image_url = Column(String(255))
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
 
 
